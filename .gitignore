@@ -1,0 +1,14 @@
+# Submission evidence exception: artifacts/phase2a-client has a 3 MiB (3145728
+# byte) path budget, enforced by web/scripts/preflight-phase2a.mjs.
+!/artifacts/
+/artifacts/*
+!/artifacts/phase2a-client/
+
+# Generated dependencies and caches never belong in a submission, at any depth.
+**/node_modules/
+**/.cache/
+**/.npm/
+**/__pycache__/
+**/playwright-report/
+**/test-results/
+/.playwright-mcp/
