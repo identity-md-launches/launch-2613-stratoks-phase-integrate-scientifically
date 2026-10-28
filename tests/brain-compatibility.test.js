@@ -3,7 +3,6 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { World as LegacyWorld } from './fixtures/legacy09af84d/src/world.js';
 import { Service as LegacyService } from './fixtures/legacy09af84d/src/service.js';
 import { World } from '../server/src/world.js';
 import { Service } from '../server/src/service.js';
@@ -11,6 +10,7 @@ import { DEFAULTS, deepMerge } from '../server/src/config.js';
 import { exportLegacyBackup } from '../server/src/rollback.js';
 import { restoreBackup } from '../server/src/store.js';
 import { runTicks, testConfig, tmpDir } from './helpers.js';
+import { starvationCorrectedLegacy } from './fixtures/legacy-starvation-reference.mjs';
 const canonical = state => {
   const s = structuredClone(state); delete s.brainMode;
   for (const c of s.creatures) {
@@ -20,11 +20,20 @@ const canonical = state => {
   return s;
 };
 
-test('legacy policy remains exactly baseline-equivalent over 4000 ticks including births and construction', () => {
+test('legacy matches recovered engine over 4000 ticks with only the specified starvation correction in the reference', async () => {
+  // Unmodified legacy no longer matches: the requested all-mode reflex must see
+  // food discarded by its old cap. This independent reference changes only that
+  // rule; no resources, RNG, learning, action selection or ecology are adjusted.
+  const ReferenceWorld = await starvationCorrectedLegacy();
   const cfg = deepMerge(DEFAULTS, { world: { brainMode: 'legacy' } });
-  const old = LegacyWorld.create(cfg), current = World.create(cfg);
+  const old = ReferenceWorld.create(cfg), current = World.create(cfg);
   runTicks(old, 4000); runTicks(current, 4000);
-  assert.deepEqual(canonical(current.toState()), old.toState());
+  const actual = canonical(current.toState()), expected = old.toState();
+  // Hash first: a real mismatch should report concise evidence, not a huge diff
+  // that exhausts the test worker's memory before it can report the assertion.
+  const hash = s => crypto.createHash('sha256').update(JSON.stringify(s)).digest('hex');
+  assert.equal(hash(actual), hash(expected), 'legacy engine differs beyond the authorized starvation rule');
+  assert.deepEqual(actual, expected);
 });
 
 test('compatibility backup loads in actual recovered binary modules; original backup is byte-identical', () => {

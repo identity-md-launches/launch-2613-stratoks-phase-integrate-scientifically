@@ -2,9 +2,9 @@
 
 The corrected static export is `dist/`, with relative asset URLs, complete runtime assets, metadata/favicon/share image, source and original lockfile. It works under `/preview/` in Chromium/WebKit and can run its private simulation and learning experiments without any backend. The normal shared-world backend address is intentionally owner-settable rather than guessed.
 
-`RELEASE.json` records the accepted parent `99e50b1c275b9422c14f279498b3e192b151992b`, exact per-file source/export hashes and the locally computed release CID:
+`RELEASE.json` records the accepted revision parent `ca7a1770779b3c55e519fc98ed80abe4b983fa7f` (the original integration was `99e50b1c275b9422c14f279498b3e192b151992b`), exact per-file source/export hashes and the locally computed release CID:
 
-`bafybeiekdihlrxcm4nhj223jm2bj3hjc3j2woz45cdlc7xubk6y3nkolbm`
+`bafybeifukwi4jdpv4sf572jkdung5zgkhe76nkchsxl2gmd5g62mpetqpm`
 
 `deploy/correction-client.car.gz` is a gzip-compressed CAR v1 rooted at that CID. All CAR block hashes were checked and all 19 files traversed with an independent UnixFS exporter and compared byte-for-byte with `dist/`. This proves the archive's contents, not public availability. CIDv1, raw leaves, a wrapping directory, fixed 262,144-byte chunks and the exact importer version/settings are recorded. Another publisher may choose different import settings and therefore a different valid CID for identical files; verify served bytes instead of assuming the CID matches.
 
@@ -17,7 +17,7 @@ The platform can publish the committed `dist/` normally. An operator with their 
 ```sh
 gzip -dc deploy/correction-client.car.gz > /tmp/stratoks-correction-client.car
 ipfs dag import /tmp/stratoks-correction-client.car
-ipfs pin add bafybeiekdihlrxcm4nhj223jm2bj3hjc3j2woz45cdlc7xubk6y3nkolbm
+ipfs pin add bafybeifukwi4jdpv4sf572jkdung5zgkhe76nkchsxl2gmd5g62mpetqpm
 ```
 
 After pinning, select an actually serving HTTPS gateway or the repaired ENS URL and run:

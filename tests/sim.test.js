@@ -72,13 +72,20 @@ test('disasters damage creatures and shelters; heal and food interventions help;
   const w = World.create(mk());
   runTicks(w, 3000);
   const sh = w.shelters.find((s) => s.stage >= 3); assert.ok(sh, 'has shelter');
-  const integ = sh.integrity, h0 = w.creatures.reduce((a, c) => a + c.health, 0);
+  const integ = sh.integrity;
+  // Measure actual fire damage, independent of births and concurrent healing.
+  let fireDamage = 0;
+  const damage = w.damage.bind(w);
+  w.damage = (c, amount, cause) => {
+    const before = c.health; damage(c, amount, cause);
+    if (cause === 'fire') { assert.ok(c.health < before); fireDamage += before - c.health; }
+  };
   const r = w.intervene({ id: 'fire-test-0001', type: 'fire', x: sh.x, y: sh.y, radius: 6, intensity: 1 }, '0xdev');
   assert.ok(r.ok);
   assert.equal(w.intervene({ id: 'cooldown-0001', type: 'fire', x: 5, y: 5, radius: 3, intensity: 0.5 }, 'x').status, 429, 'frequency bound');
   runTicks(w, 60);
   assert.ok(sh.integrity < integ || !w.shelters.includes(sh), 'shelter damaged');
-  assert.ok(w.creatures.reduce((a, c) => a + c.health, 0) <= h0);
+  assert.ok(fireDamage > 0, 'fire damages creatures as well as shelters');
   runTicks(w, 200);
   const s2 = w.intervene({ id: 'storm-test-001', type: 'storm', x: 28, y: 28, radius: 8, intensity: 1 }, '0xdev');
   assert.ok(s2.ok);

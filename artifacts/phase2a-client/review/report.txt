@@ -1,0 +1,1 @@
+Wrote docs/correction/RESULTS.md; seeds/resources/legacy/controls/source hashes verified.

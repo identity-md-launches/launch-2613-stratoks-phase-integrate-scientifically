@@ -25,6 +25,7 @@ export function BrainBehavior({ detail, local, stale, onLab }: {
     {d ? <>
       <div className="brain-selection">
         <span className="small">{sources[d.source] ?? d.source} · tick {number(d.tick)}{d.mode && d.mode !== brain.mode ? ` · ${d.mode}` : ""}</span>
+        {!d.mode && <p className="small">Decision mode unrecorded</p>}
         <strong>{actionName(d.selectedAction)}{d.selectedTarget !== null ? ` · food site #${d.selectedTarget}` : ""}</strong>
         <p className="small">{d.source === "model" ? "Sampled from policy scores; the highest score is not always chosen." : "Selected by a survival rule, not evidence of learned preference."}</p>
       </div>
@@ -41,10 +42,10 @@ export function BrainBehavior({ detail, local, stale, onLab }: {
       </details>
       <details className="brain-disclosure" open>
         <summary>Action candidates & preferences</summary>
-        <p className="fineprint">{(d.mode ?? brain.mode) === "legacy" ? "Totals use the linear policy and game rules. Circuit associations are unavailable in legacy decisions." : "Action probability uses its best target score, then targets are sampled by score. Association is the circuit output before its 2.5× gain; ablation sets it to zero."} Wallet opinions are separate game memory.</p>
+        <p className="fineprint">{!d.mode ? "Scoring policy and target selection method were not recorded for this decision. Totals and associations are retained as captured." : d.mode === "legacy" ? "Totals use the linear policy and game rules. Circuit associations are unavailable in legacy decisions." : "Action probability uses its best target score, then targets are sampled by score. Association is the circuit output before its 2.5× gain; ablation sets it to zero."} Wallet opinions are separate game memory.</p>
         <CandidateTable brain={brain} />
       </details>
-      {(d.mode ?? brain.mode) !== "legacy" && <details className="brain-disclosure">
+      {(d.mode ? d.mode !== "legacy" : d.activeKCs.length > 0) && <details className="brain-disclosure">
         <summary>Sparse circuit activity</summary>
         <p className="small">{d.activeKCs.length} / 128 KC-like units active for the chosen input.</p>
         <p className="small">Unit indices: {d.activeKCs.join(", ") || "No circuit trace"}.</p>

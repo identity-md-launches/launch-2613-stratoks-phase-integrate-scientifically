@@ -1,9 +1,9 @@
 {
   "release": "STRATOKS Phase 2A correction",
-  "acceptedParentCommit": "99e50b1c275b9422c14f279498b3e192b151992b",
+  "acceptedParentCommit": "ca7a1770779b3c55e519fc98ed80abe4b983fa7f",
   "submissionCommit": null,
   "commitBoundary": "The submission service assigns the final commit after this work. This manifest identifies final source/export bytes; no uncommitted tree is represented as a Git commit.",
-  "cid": "bafybeiekdihlrxcm4nhj223jm2bj3hjc3j2woz45cdlc7xubk6y3nkolbm",
+  "cid": "bafybeifukwi4jdpv4sf572jkdung5zgkhe76nkchsxl2gmd5g62mpetqpm",
   "cidStatus": "Computed locally and verified by CAR traversal; not a claim of public pinning.",
   "import": {
     "cidVersion": 1,
@@ -17,29 +17,29 @@
     "car": "5.4.7"
   },
   "carFile": "deploy/correction-client.car.gz",
-  "carGzipBytes": 684893,
-  "carGzipSha256": "4c26dfc349a6fa760352a4b6dadc80c7c8a40f1052ba802257eb2da7dcd55361",
-  "carBytes": 1190346,
-  "carSha256": "1c544e599e45ee4f6ec24a84b90641b8595384a6b479c28313ab066c0813d88c",
+  "carGzipBytes": 685097,
+  "carGzipSha256": "aa09f9be01c9f907a12a5c577eaef61926ec8f3f138fc8056d43e722f1d53593",
+  "carBytes": 1191021,
+  "carSha256": "9da6a41ffd02542147d83681c00262681d4970f3e5043dc9bb2f08a104ac9b4e",
   "carFilesVerified": 19,
-  "exportTreeSha256": "2b5943824854d7e31be77eb60bd2ae9ae68927a476ce8db6444b5b5e1e29f665",
-  "sourceTreeSha256": "3e08a9162041fd932650899fe4d5f6acf2b42ce0e46b4947081926308e618c31",
-  "exportBytes": 1187685,
+  "exportTreeSha256": "54dd31b4f40eccf8e46b508380d29881965d8b8539cc13869d4671d7fda4435e",
+  "sourceTreeSha256": "df0a2e01be35e82d9d739dfe0ee34217f6d2cb43237843b6068b628ee181a3a3",
+  "exportBytes": 1188360,
   "staticFiles": [
     {
-      "file": "assets/demo.worker-DHYRM8He.js",
-      "bytes": 52203,
-      "sha256": "d3c681cf6ce5d5ff678a00bbf491c69b8ec985ddcbfff94df30cd6d3c7b68e99"
+      "file": "assets/demo.worker-Cg15FJoQ.js",
+      "bytes": 52426,
+      "sha256": "5224b3c1b5d8ab0cbad95b80384aba5af4675a7e19a62c53ef27d1fe080bae37"
     },
     {
-      "file": "assets/dist-D-rrROUx.js",
+      "file": "assets/dist-Be7xzg-E.js",
       "bytes": 102687,
-      "sha256": "72fb4e3b341e59636be59dde7de3a906fceed4d4648c60d85907c0e41680228e"
+      "sha256": "c33d3658b6437478420f6f0303849361a05b60270fed3c9526ae041e2de4c8c4"
     },
     {
-      "file": "assets/index-Bht3Huoh.js",
-      "bytes": 414807,
-      "sha256": "5478e9856cc441624839868718191cd91f4cc9481c0eaaccc22135cc429bb507"
+      "file": "assets/index-CGsUcnbz.js",
+      "bytes": 415036,
+      "sha256": "add484a5a10ae8a25d3dbf75ed5a8bb35642bf41ba4f10919741a829c48f36f6"
     },
     {
       "file": "assets/index-Cv25ErR5.css",
@@ -47,9 +47,9 @@
       "sha256": "78e92d54fc566c71d277ae203fca5739838ac149570236cb5dcef11124b934df"
     },
     {
-      "file": "assets/learning.worker-UgPnZp2E.js",
-      "bytes": 51914,
-      "sha256": "e8c210b0282b5de7e10c40d22877b4efe6a01fe146a58f9fd7d24ec599d31dac"
+      "file": "assets/learning.worker-Chr4HT56.js",
+      "bytes": 52137,
+      "sha256": "b7b43178664c90d4b3bbcddedb62c2d3b92414db7fd946c172b4905fcfef8c11"
     },
     {
       "file": "assets/manrope-latin-wght-normal-DHIcAJRg.woff2",
@@ -64,7 +64,7 @@
     {
       "file": "index.html",
       "bytes": 1085,
-      "sha256": "afa84f23fa7aa6c2ef748a8ba5d5fc63481cdcb0a93e87523b458b14b93cf246"
+      "sha256": "63a262677b7b6632feda0d4a5a8564a3c795941bc71945b89bc85954b55d6da0"
     },
     {
       "file": "licenses/THIRD_PARTY_NOTICES.txt",
@@ -175,8 +175,8 @@
     },
     {
       "file": "server/src/actions.js",
-      "bytes": 24819,
-      "sha256": "3320ae614283f78c76901d08ff2d55afeca0725322c80d427cacfa69b0ab05a4"
+      "bytes": 25367,
+      "sha256": "f701a0efe6079a9e50f1aa38cea165b1dfd664eb35bf76d399dcbb4d8bec7184"
     },
     {
       "file": "server/src/auth.js",
@@ -265,8 +265,8 @@
     },
     {
       "file": "shared/brain-v1.md",
-      "bytes": 6313,
-      "sha256": "c67955f03d03010f3e908defe1a1d105d444a351c6b0f6634d34d57e66271336"
+      "bytes": 7240,
+      "sha256": "919bdf07f9fb5d44af9ea9a8e0e4034d456b7d909f50aa5f88ed4f7c2f53e5e8"
     },
     {
       "file": "shared/fixtures/sample-delta.json",
@@ -389,6 +389,11 @@
       "sha256": "94fe15693b903908c8e8e04c03d9f24bcca228a9555f4bc8db5b3e5ef6366b19"
     },
     {
+      "file": "web/scripts/check-review.mjs",
+      "bytes": 7978,
+      "sha256": "e4d336167f4b85bbb007df0bd435927657a8e92595f1264c5aa616c7d431c94b"
+    },
+    {
       "file": "web/scripts/check-revision.mjs",
       "bytes": 18070,
       "sha256": "e79cb3d24a85890e37bd6abc1938ddeddf8893c2b17b5a30c37a37ee5bbd56a6"
@@ -455,8 +460,8 @@
     },
     {
       "file": "web/src/BrainBehavior.tsx",
-      "bytes": 7275,
-      "sha256": "350b2842e0d1c6e325cba7406dd6df29228205a096a1e3c189484853b4735024"
+      "bytes": 7494,
+      "sha256": "a30097f9d391244ee547f5062fd4f34cf2ba5d0d3333b034a7a5d73009e800d9"
     },
     {
       "file": "web/src/LearningLab.tsx",

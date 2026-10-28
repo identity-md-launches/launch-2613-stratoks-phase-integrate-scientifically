@@ -1,5 +1,7 @@
 # Phase 2A correction validation
 
+**Historical report for the previous correction, `ca7a177`.** The reopened review reproduced two remaining defects. Final behavior, test counts, experiment results, the qualified legacy comparison, release identity and six-domain recheck are in [REVIEW.md](REVIEW.md). Its findings and current `RESULTS.md` / `RELEASE.json` supersede the older results and claims below.
+
 Local author checks, 2026-10-28. Accepted parent: `99e50b1c275b9422c14f279498b3e192b151992b`. No production data/service, owner's VPS, contract, token or account configuration was accessed. Existing application, reduced circuit, recovered archive, world migration and original learning/ecology evidence remain. No art redesign or payment work is included.
 
 ## Issue-to-fix table

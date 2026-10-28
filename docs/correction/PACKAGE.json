@@ -1,17 +1,17 @@
 {
   "archive": "deploy/correction-vps.tar.gz",
-  "archiveBytes": 2110931,
-  "sha256": "90804a709b7fd6020d0a2afbae5fa488f0615cb1b6d56002fbd4204b52567304",
+  "archiveBytes": 2128976,
+  "sha256": "01474f7890a0874419de76ff7fba9d8ed9259a02281b7cef60efec44faa6cae2",
   "files": [
     {
       "file": "DESIGN.md",
-      "bytes": 8321,
-      "sha256": "8a87978d92533bd09c580ccc29a8c634f4054ed8c091811ba2f76c572ce407e6"
+      "bytes": 8777,
+      "sha256": "c1db793fac61451d6da311620be5e491fc0162572dd50bf3813b0328ecb96152"
     },
     {
       "file": "README.md",
-      "bytes": 7997,
-      "sha256": "f5150ce5e282e0236f3a583df8ee1c6a42eaa192c554d563f0048ad763bca2d5"
+      "bytes": 9134,
+      "sha256": "276de8ad6d10ccd21ce843191cdfea7ed19beaa8174e09c7e2289181a8926ea5"
     },
     {
       "file": "deploy/Dockerfile",
@@ -139,19 +139,19 @@
       "sha256": "6c04b749606afa71d027cc3c65895a2241948dade26cc8b6f0337f5416d50d83"
     },
     {
-      "file": "dist/assets/demo.worker-DHYRM8He.js",
-      "bytes": 52203,
-      "sha256": "d3c681cf6ce5d5ff678a00bbf491c69b8ec985ddcbfff94df30cd6d3c7b68e99"
+      "file": "dist/assets/demo.worker-Cg15FJoQ.js",
+      "bytes": 52426,
+      "sha256": "5224b3c1b5d8ab0cbad95b80384aba5af4675a7e19a62c53ef27d1fe080bae37"
     },
     {
-      "file": "dist/assets/dist-D-rrROUx.js",
+      "file": "dist/assets/dist-Be7xzg-E.js",
       "bytes": 102687,
-      "sha256": "72fb4e3b341e59636be59dde7de3a906fceed4d4648c60d85907c0e41680228e"
+      "sha256": "c33d3658b6437478420f6f0303849361a05b60270fed3c9526ae041e2de4c8c4"
     },
     {
-      "file": "dist/assets/index-Bht3Huoh.js",
-      "bytes": 414807,
-      "sha256": "5478e9856cc441624839868718191cd91f4cc9481c0eaaccc22135cc429bb507"
+      "file": "dist/assets/index-CGsUcnbz.js",
+      "bytes": 415036,
+      "sha256": "add484a5a10ae8a25d3dbf75ed5a8bb35642bf41ba4f10919741a829c48f36f6"
     },
     {
       "file": "dist/assets/index-Cv25ErR5.css",
@@ -159,9 +159,9 @@
       "sha256": "78e92d54fc566c71d277ae203fca5739838ac149570236cb5dcef11124b934df"
     },
     {
-      "file": "dist/assets/learning.worker-UgPnZp2E.js",
-      "bytes": 51914,
-      "sha256": "e8c210b0282b5de7e10c40d22877b4efe6a01fe146a58f9fd7d24ec599d31dac"
+      "file": "dist/assets/learning.worker-Chr4HT56.js",
+      "bytes": 52137,
+      "sha256": "b7b43178664c90d4b3bbcddedb62c2d3b92414db7fd946c172b4905fcfef8c11"
     },
     {
       "file": "dist/assets/manrope-latin-wght-normal-DHIcAJRg.woff2",
@@ -176,7 +176,7 @@
     {
       "file": "dist/index.html",
       "bytes": 1085,
-      "sha256": "afa84f23fa7aa6c2ef748a8ba5d5fc63481cdcb0a93e87523b458b14b93cf246"
+      "sha256": "63a262677b7b6632feda0d4a5a8564a3c795941bc71945b89bc85954b55d6da0"
     },
     {
       "file": "dist/licenses/THIRD_PARTY_NOTICES.txt",
@@ -240,28 +240,33 @@
     },
     {
       "file": "docs/correction/HTTPS.json",
-      "bytes": 2114,
-      "sha256": "dce5615d61825cdba9868e110ccebe750ab1adf00d9a4f1ac24db3dfe95046d1"
+      "bytes": 2098,
+      "sha256": "3510d68ff66b68a453fbbff9a0864bcc45ba4fcd6a3483c7788a8467ab966b20"
     },
     {
       "file": "docs/correction/PUBLICATION.md",
-      "bytes": 3928,
-      "sha256": "361ab2d1d45cbdf7cec27fc715983cfeb5d61d6f6dcdf6c2ec262eb8e2a4be6a"
+      "bytes": 4011,
+      "sha256": "ec24a5d637ac5a326e0a0bee119dabeaf17d2a44f58796840b2b8029942f99a6"
     },
     {
       "file": "docs/correction/RELEASE.json",
-      "bytes": 18744,
-      "sha256": "fb9b33a8767f96fafc67ba59862c84208b4a2ae7cbc0877481376e57d9104da2"
+      "bytes": 18907,
+      "sha256": "9c120124a63213eb225458787d3726c46ec6e93b19cbe7d10b43a2ad9fd5ff88"
     },
     {
       "file": "docs/correction/RESULTS.md",
-      "bytes": 8523,
-      "sha256": "66fe4f687e43dce4293750bd4f88af07c0c354c8f2d2e55d6df0d28aca2fd78c"
+      "bytes": 9902,
+      "sha256": "7766a1d5ec93f1484d66b1b66d7e2db26dc7a047ac1ea5d63bd93b358be0a668"
+    },
+    {
+      "file": "docs/correction/REVIEW.md",
+      "bytes": 15459,
+      "sha256": "9bcb6e6365c0bb529ab987255bbe0fa0c0f5cba6a6c95b2e47e811d843232b4e"
     },
     {
       "file": "docs/correction/VALIDATION.md",
-      "bytes": 13933,
-      "sha256": "a70f16a9609cb23470e329356500aee8f8b039c9cdcad2890aebe49937fad07a"
+      "bytes": 14304,
+      "sha256": "eb3d963afc50abd90c7df8266b8498ba347f7c5459f19d037903d22e8264e9f3"
     },
     {
       "file": "docs/correction/VPS.md",
@@ -350,8 +355,8 @@
     },
     {
       "file": "server/src/actions.js",
-      "bytes": 24819,
-      "sha256": "3320ae614283f78c76901d08ff2d55afeca0725322c80d427cacfa69b0ab05a4"
+      "bytes": 25367,
+      "sha256": "f701a0efe6079a9e50f1aa38cea165b1dfd664eb35bf76d399dcbb4d8bec7184"
     },
     {
       "file": "server/src/auth.js",
@@ -440,8 +445,8 @@
     },
     {
       "file": "shared/brain-v1.md",
-      "bytes": 6313,
-      "sha256": "c67955f03d03010f3e908defe1a1d105d444a351c6b0f6634d34d57e66271336"
+      "bytes": 7240,
+      "sha256": "919bdf07f9fb5d44af9ea9a8e0e4034d456b7d909f50aa5f88ed4f7c2f53e5e8"
     },
     {
       "file": "shared/fixtures/sample-delta.json",
@@ -465,8 +470,8 @@
     },
     {
       "file": "tests/brain-compatibility.test.js",
-      "bytes": 3920,
-      "sha256": "912a3ef19c345268f46b8e1113fd97591e122990fbb6177784da01437e5fa12f"
+      "bytes": 4659,
+      "sha256": "ae91ad7ef9371f2eb7f774a37d7ee7530bc8ca222579f4e9f2d0c76ef330bb6b"
     },
     {
       "file": "tests/brain-correction.test.js",
@@ -480,8 +485,8 @@
     },
     {
       "file": "tests/durability.test.js",
-      "bytes": 12110,
-      "sha256": "7c1bc2cbb947faace3a3a5ced3834ee847683c2c290b74a0906b5fef3e00ae74"
+      "bytes": 12365,
+      "sha256": "3a8822419adf028f1a26f4c8882131e9d11b0db2e647f52e689c226b6a43fd4a"
     },
     {
       "file": "tests/event-boundaries.test.js",
@@ -530,8 +535,8 @@
     },
     {
       "file": "tests/experiments/report-correction.mjs",
-      "bytes": 10145,
-      "sha256": "44a1f37c7b58f07b90565d95c508c84f33e92a80ca28650d339576c0b4b9221c"
+      "bytes": 12067,
+      "sha256": "42c6c6537fee795f81ea2d71c64594a919cc18b4e91a2493b111c8689fd9edd3"
     },
     {
       "file": "tests/experiments/report-phase2a.mjs",
@@ -542,6 +547,16 @@
       "file": "tests/experiments/reproduce-correction.mjs",
       "bytes": 1844,
       "sha256": "4907dbad1df8cf5e4c350eabd94ab4129944dc6fe2438ca9ff40276a0d8beb09"
+    },
+    {
+      "file": "tests/experiments/reproduce-review.mjs",
+      "bytes": 5067,
+      "sha256": "b59cde2eabafa0548f463b03be9bc0129de580d3481d47831e4c3b0760b128c7"
+    },
+    {
+      "file": "tests/fixtures/accepted99e50b1-mb-decision.json.gz",
+      "bytes": 4222,
+      "sha256": "2fde76b9f29645c09af81d3ec63ee61a338ac72a53ecf75686798ff624470e1b"
     },
     {
       "file": "tests/fixtures/crash-child.mjs",
@@ -557,6 +572,11 @@
       "file": "tests/fixtures/ethers-signatures.json",
       "bytes": 6814,
       "sha256": "df5f8cb4692539aa3289b8d264d3341374549162ed276a433f37ba4c1b4cb0a1"
+    },
+    {
+      "file": "tests/fixtures/legacy-starvation-reference.mjs",
+      "bytes": 2271,
+      "sha256": "c58dada32455a35bc878a8e0ee8e41e8b4f42094b3ef6671ace74981bf5ba0f0"
     },
     {
       "file": "tests/fixtures/legacy09af84d/package.json",
@@ -689,14 +709,19 @@
       "sha256": "a444a6d6bc01b38c6337e192b1ca70fdf0c6f485a2e61697895d684f3759d38d"
     },
     {
+      "file": "tests/review-regressions.test.js",
+      "bytes": 5239,
+      "sha256": "de9b6d21cb2c45d9338c28e8813e437f2f1a312b7869e7af2ba769cdb597c62c"
+    },
+    {
       "file": "tests/service.test.js",
       "bytes": 13468,
       "sha256": "4b27206cf732de55b2caf1ca0d933764181ca285146d7f461827a67367ac4a66"
     },
     {
       "file": "tests/sim.test.js",
-      "bytes": 8686,
-      "sha256": "c30b55c3c72d4b98c3a3eede4f8b9fa65093018e1c43e6039f214a34ce890a81"
+      "bytes": 8969,
+      "sha256": "2be30736fbff48e683b233f0aa3df3b75e2f14442237c2290c95407ba9c967c7"
     },
     {
       "file": "tests/wallet-auth.test.js",
@@ -814,6 +839,11 @@
       "sha256": "94fe15693b903908c8e8e04c03d9f24bcca228a9555f4bc8db5b3e5ef6366b19"
     },
     {
+      "file": "web/scripts/check-review.mjs",
+      "bytes": 7978,
+      "sha256": "e4d336167f4b85bbb007df0bd435927657a8e92595f1264c5aa616c7d431c94b"
+    },
+    {
       "file": "web/scripts/check-revision.mjs",
       "bytes": 18070,
       "sha256": "e79cb3d24a85890e37bd6abc1938ddeddf8893c2b17b5a30c37a37ee5bbd56a6"
@@ -880,8 +910,8 @@
     },
     {
       "file": "web/src/BrainBehavior.tsx",
-      "bytes": 7275,
-      "sha256": "350b2842e0d1c6e325cba7406dd6df29228205a096a1e3c189484853b4735024"
+      "bytes": 7494,
+      "sha256": "a30097f9d391244ee547f5062fd4f34cf2ba5d0d3333b034a7a5d73009e800d9"
     },
     {
       "file": "web/src/LearningLab.tsx",

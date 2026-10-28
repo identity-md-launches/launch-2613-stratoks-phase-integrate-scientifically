@@ -4,6 +4,7 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { gunzipSync } from 'node:zlib';
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const read = rel => JSON.parse(fs.readFileSync(path.join(root, rel), 'utf8'));
 const oldLearning = read('tests/results/phase2a/learning.json'), learning = read('tests/results/correction/learning.json');
@@ -17,7 +18,12 @@ assert.equal(eco.protocol.ticks, 5000); assert.equal(eco.protocol.seeds, 10);
 assert(learning.rows.every(r => r.restartStateIdentical && r.restartChoicesIdentical));
 assert(learning.rows.every(r => r.phases.filter(p => p.phase.includes('heldout')).every(p => !p.weightsChanged)));
 assert(learning.rows.filter(r => ['mb-v1-frozen', 'mb-v1-ablated'].includes(r.mode)).every(r => r.phases.every(p => !p.weightsChanged && p.neuralUpdates === 0)));
-assert.deepEqual(eco.rows.filter(r => r.mode === 'legacy'), oldEco.rows.filter(r => r.mode === 'legacy'), 'Legacy per-seed ecology changed');
+// The reopened all-mode starvation correction intentionally changes legacy
+// reflex decisions. Full ecology equality with the buggy legacy is no longer a
+// valid assertion; the 4000-tick differential test changes ONLY that reference rule.
+const priorEco = JSON.parse(gunzipSync(fs.readFileSync(path.join(root, 'tests/results/review/ca7a177-ecology.json.gz'))));
+const priorLearning = JSON.parse(gunzipSync(fs.readFileSync(path.join(root, 'tests/results/review/ca7a177-learning.json.gz'))));
+assert.deepEqual(learning.rows, priorLearning.rows, 'Controlled component learning unexpectedly changed');
 assert(eco.rows.filter(r => ['mb-v1-frozen', 'mb-v1-ablated'].includes(r.mode)).every(r => r.neuralUpdates === 0));
 const f = (v, n = 3) => Number(v).toFixed(n), pct = v => `${f(v * 100, 2)}%`;
 const modes = ['legacy', 'mb-v1', 'mb-v1-frozen', 'mb-v1-ablated'];
@@ -48,8 +54,19 @@ for (const mode of modes) {
   };
   lines.push(`| ${mode} | ${pair('population')} | ${pair('births')} | ${pair('deaths')} | ${pair('food')} | ${pair('sheltersComplete')} | ${pair('hungryFraction', true)} |`);
 }
+lines.push('', '## Reopened review: previous correction versus final reflex', '',
+  'The independent reviewer reproduced a remaining cap bug on ca7a177. Its raw learning/ecology evidence is retained losslessly in `tests/results/review/ca7a177-*.json.gz`. Only emergency food visibility changes in this revision; the learned candidate cap and action/target hierarchy are unchanged. The controlled component rows are identical to ca7a177.', '',
+  '| Mode | Population, ca7a177 → final | Births | Deaths | Food | Complete shelters | Hungry creature-ticks (>70 hunger) |',
+  '|---|---|---|---|---|---|---|');
+for (const mode of modes) {
+  const pair = (metric, percent = false) => {
+    const a = priorEco.summary.find(r => r.mode === mode && r.metric === metric).mean, b = eco.summary.find(r => r.mode === mode && r.metric === metric).mean;
+    return `${percent ? pct(a) : f(a, 2)} → ${percent ? pct(b) : f(b, 2)}`;
+  };
+  lines.push(`| ${mode} | ${pair('population')} | ${pair('births')} | ${pair('deaths')} | ${pair('food')} | ${pair('sheltersComplete')} | ${pair('hungryFraction', true)} |`);
+}
 lines.push('',
-  '**Regression:** mb-v1 hunger exposure and mean deaths increase versus its original run even though population/births and food improve. Corrected mb-v1 still has lower population/births, fewer shelters, less food, more deaths and more hunger than legacy. Corrected frozen/ablated also exceed legacy hunger/deaths and have lower population. This is not an overall fitness improvement claim. Legacy per-seed rows match the original evidence exactly; ablated and frozen now have zero updates and identical behavior in their initially untrained worlds.', '',
+  '**Regressions and limits:** remaining food decreases in every mode versus ca7a177, despite lower hunger and more births/survivors. Food remaining alone cannot distinguish consumption from future scarcity. Final mb-v1 still has lower population/births, fewer shelters, less food and more hunger than final legacy. Its mean deaths tie legacy in this sample; no overall fitness or learned-survival claim follows. Frozen/ablated remain identical in initially untrained worlds with zero neural updates. **Unmodified legacy ecology is no longer equivalent**: the requested nearest feasible reflex in every mode changes legacy starvation choices too. The legacy non-emergency engine matches an independently adapted recovered reference over 4000 ticks, with only the specified reflex changed in that reference; that is not a claim of equivalence to the buggy unmodified engine.', '',
   `Ecology elapsed time: ${f(eco.elapsedMs / 1000, 2)} seconds. SD in the experiment scripts uses division by n; these are descriptive samples, with no significance or generalization claim.`, '',
   '**Confounds and limits:** simultaneous fixes change emergency targets and action-family probabilities; these runs do not identify each fix’s separate contribution. Candidate availability, fixed priors, spatial binning, competition and shaped rewards remain engineered influences. Frozen/ablated worlds start untrained; trained-weight retention is tested separately. Seeds pair initial conditions, but changed choices diverge world RNG consumption through navigation/ecology, so later environments are not identical exposures. Five thousand ticks do not cover a full lifespan, extinction risk, long-term learning stability or storage growth. Survival reflexes are counted separately from model decisions; a later update after a reflex is an exposure, not evidence of learned selection.', '',
   '## Capacity', '',

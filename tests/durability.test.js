@@ -39,7 +39,7 @@ test('SIGKILL after lifecycle records but before the snapshot: recovered world n
   const dir = tmpDir('crash-life');
   const r = child(dir, 'lifecycle', 1000);
   assert.equal(r.signal, 'SIGKILL', r.err);
-  const [{ snapshotSeq }, { births, deaths }] = r.out;
+  const [{ snapshotSeq }, { births, deaths, killedAtTick }] = r.out;
   assert.ok(births >= 1 && deaths >= 1);
   const before = lines(path.join(dir, 'lifecycle.jsonl')).filter((x) => x.seq > snapshotSeq);
   assert.ok(before.length >= 2, 'uncommitted records were on disk at the crash (the original bug condition)');
@@ -49,10 +49,13 @@ test('SIGKILL after lifecycle records but before the snapshot: recovered world n
   assert.ok(fs.existsSync(path.join(dir, s.recovery.moved['lifecycle.jsonl'].orphanFile)), 'orphaned records preserved, not deleted');
   checkConsistent(dir, s);
   // The deterministic world re-lives the same future: the same creatures die again, and must be recorded ONCE.
-  for (let i = 0; i < 1500; i++) s.tickOnce();
+  // Replay the exact future the child actually reached. Corrected foraging can
+  // move its first death beyond the former arbitrary 1500-tick replay window.
+  assert.ok(killedAtTick > s.world.tick && killedAtTick < 20000);
+  while (s.world.tick < killedAtTick) s.tickOnce();
   s.snapshot(true);
   const c = checkConsistent(dir, s);
-  assert.ok(c.deaths >= deaths && c.births >= births);
+  assert.equal(c.deaths, deaths); assert.equal(c.births, births);
   s.stop();
   // Repeated recovery is a no-op.
   const d1 = digest(dir); const s2 = open(dir); assert.deepEqual(s2.recovery.moved, {}); s2.stop();

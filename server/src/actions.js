@@ -29,10 +29,14 @@ function nearestFood(w, c) {
   }
   return best ? { m: best, d: bd } : null;
 }
-function emergencyFood(w, c) {
+function emergencyFood(w, c, remembered) {
   // Survival uses distance, never learned utility or candidate insertion order.
+  // Merge retained memory BEFORE the ten-site cap with ALL current observations.
+  // Live sensing overrides stale amounts; out-of-range sites use memory only.
+  const sites = new Map(remembered.filter(m => w.bushes.some(b => b.id === m.id)).map(m => [m.id, m]));
+  for (const b of w.bushes) if (dist(c, b) <= w.cfg.world.perceptionRadius) sites.set(b.id, b);
   // Check reachability without consuming either RNG. Ties use the stable food id.
-  const known = c.places.food.filter(m => m.amount >= 0.5)
+  const known = [...sites.values()].filter(m => m.amount >= 0.5)
     .sort((a, b) => dist(c, a) - dist(c, b) || a.id - b.id);
   return known.find(m => w.walkable(m.x, m.y) && w.findPath(c.x, c.y, m.x, m.y, false) !== null);
 }
@@ -57,6 +61,7 @@ function repairTarget(w, c) { const h = w.getShelter(c.home); return h && h.stag
 // ---------- decision ----------
 export function decide(w, c) {
   const cfg = w.cfg.world;
+  const rememberedFood = c.places.food.slice();
   perceive(w, c);
   const adult = w.isAdult(c);
   const haz = w.hazardAt(c);
@@ -105,11 +110,12 @@ export function decide(w, c) {
     add('AVOID', { vis, wallet: v });
   }
   // emergencies override choice (hard-wired survival reflexes, not learned)
+  const emergency = c.hunger >= 80 && haz.danger <= 0.8 ? emergencyFood(w, c, rememberedFood) : null;
   let pick, source = 'reflex';
   if (haz.danger > 0.8) pick = cand.find((x) => x.a === 'FLEE');
-  else if (c.hunger >= 55 && !food && !haz.danger) { pick = { a: 'WANDER', ...scoreCandidate(w, c, 'WANDER', f), far: true }; source = 'rule'; } // foraging search when no known food
-  else if (c.hunger >= 80 && food) {
-    const target = emergencyFood(w, c);
+  else if (c.hunger >= 55 && !food && !emergency && !haz.danger) { pick = { a: 'WANDER', ...scoreCandidate(w, c, 'WANDER', f), far: true }; source = 'rule'; } // foraging search when no known food
+  else if (c.hunger >= 80 && (food || emergency)) {
+    const target = emergency;
     if (target) {
       pick = cand.find(x => x.a === 'EAT' && x.food.m.id === target.id);
       // A reachable remembered site can be outside the local learned candidate set.

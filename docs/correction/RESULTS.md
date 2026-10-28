@@ -21,7 +21,7 @@ Seeds 1–10, all four modes, all three original tasks, unchanged 300-trial acqu
 | threat | mb-v1-frozen | 49.55% → 49.55% | 50.50% → 50.50% | 5.40% | 10 / 10 |
 | threat | mb-v1-ablated | 49.55% → 49.55% | 50.50% → 50.50% | 5.40% | 10 / 10 |
 
-All 120 serialized state and continuation comparisons agree. All held-out phases freeze weights. Frozen and ablated training now both produce zero neural updates. Earlier ablation scores already hid learned output, so its unchanged choice fraction concealed its plasticity defect; the new weight/counter regressions expose this. Run elapsed time: 7.31 seconds.
+All 120 serialized state and continuation comparisons agree. All held-out phases freeze weights. Frozen and ablated training now both produce zero neural updates. Earlier ablation scores already hid learned output, so its unchanged choice fraction concealed its plasticity defect; the new weight/counter regressions expose this. Run elapsed time: 7.32 seconds.
 
 The hierarchy retains a single per-creature random draw and conditional softmax. With only one action in these experiments, target choice probabilities are the same as before. Unchanged learning fractions are expected, not evidence that the ecology regressions are absent. Legacy cannot distinguish the equal-feature targets. Frozen and ablated choices remain near chance. No failed seed was dropped.
 
@@ -31,14 +31,25 @@ The same ten initial worlds, 24 initial creatures, 5,000 ticks per mode/seed, un
 
 | Mode | Population, original → corrected | Births | Deaths | Food | Complete shelters | Hungry creature-ticks (>70 hunger) |
 |---|---|---|---|---|---|---|
-| legacy | 42.50 → 42.50 | 18.70 → 18.70 | 0.20 → 0.20 | 247.38 → 247.38 | 12.20 → 12.20 | 3.84% → 3.84% |
-| mb-v1 | 37.30 → 39.70 | 13.60 → 16.20 | 0.30 → 0.50 | 178.77 → 207.89 | 11.20 → 11.60 | 6.18% → 7.53% |
-| mb-v1-frozen | 38.40 → 40.60 | 15.10 → 17.20 | 0.70 → 0.60 | 201.81 → 223.13 | 11.10 → 11.90 | 7.53% → 6.88% |
-| mb-v1-ablated | 38.40 → 40.60 | 15.10 → 17.20 | 0.70 → 0.60 | 201.81 → 223.13 | 11.10 → 11.90 | 7.53% → 6.88% |
+| legacy | 42.50 → 43.60 | 18.70 → 19.70 | 0.20 → 0.10 | 247.38 → 238.84 | 12.20 → 12.40 | 3.84% → 1.34% |
+| mb-v1 | 37.30 → 41.60 | 13.60 → 17.70 | 0.30 → 0.10 | 178.77 → 192.11 | 11.20 → 11.70 | 6.18% → 2.86% |
+| mb-v1-frozen | 38.40 → 43.30 | 15.10 → 19.40 | 0.70 → 0.10 | 201.81 → 212.67 | 11.10 → 12.20 | 7.53% → 2.68% |
+| mb-v1-ablated | 38.40 → 43.30 | 15.10 → 19.40 | 0.70 → 0.10 | 201.81 → 212.67 | 11.10 → 12.20 | 7.53% → 2.68% |
 
-**Regression:** mb-v1 hunger exposure and mean deaths increase versus its original run even though population/births and food improve. Corrected mb-v1 still has lower population/births, fewer shelters, less food, more deaths and more hunger than legacy. Corrected frozen/ablated also exceed legacy hunger/deaths and have lower population. This is not an overall fitness improvement claim. Legacy per-seed rows match the original evidence exactly; ablated and frozen now have zero updates and identical behavior in their initially untrained worlds.
+## Reopened review: previous correction versus final reflex
 
-Ecology elapsed time: 75.36 seconds. SD in the experiment scripts uses division by n; these are descriptive samples, with no significance or generalization claim.
+The independent reviewer reproduced a remaining cap bug on ca7a177. Its raw learning/ecology evidence is retained losslessly in `tests/results/review/ca7a177-*.json.gz`. Only emergency food visibility changes in this revision; the learned candidate cap and action/target hierarchy are unchanged. The controlled component rows are identical to ca7a177.
+
+| Mode | Population, ca7a177 → final | Births | Deaths | Food | Complete shelters | Hungry creature-ticks (>70 hunger) |
+|---|---|---|---|---|---|---|
+| legacy | 42.50 → 43.60 | 18.70 → 19.70 | 0.20 → 0.10 | 247.38 → 238.84 | 12.20 → 12.40 | 3.84% → 1.34% |
+| mb-v1 | 39.70 → 41.60 | 16.20 → 17.70 | 0.50 → 0.10 | 207.89 → 192.11 | 11.60 → 11.70 | 7.53% → 2.86% |
+| mb-v1-frozen | 40.60 → 43.30 | 17.20 → 19.40 | 0.60 → 0.10 | 223.13 → 212.67 | 11.90 → 12.20 | 6.88% → 2.68% |
+| mb-v1-ablated | 40.60 → 43.30 | 17.20 → 19.40 | 0.60 → 0.10 | 223.13 → 212.67 | 11.90 → 12.20 | 6.88% → 2.68% |
+
+**Regressions and limits:** remaining food decreases in every mode versus ca7a177, despite lower hunger and more births/survivors. Food remaining alone cannot distinguish consumption from future scarcity. Final mb-v1 still has lower population/births, fewer shelters, less food and more hunger than final legacy. Its mean deaths tie legacy in this sample; no overall fitness or learned-survival claim follows. Frozen/ablated remain identical in initially untrained worlds with zero neural updates. **Unmodified legacy ecology is no longer equivalent**: the requested nearest feasible reflex in every mode changes legacy starvation choices too. The legacy non-emergency engine matches an independently adapted recovered reference over 4000 ticks, with only the specified reflex changed in that reference; that is not a claim of equivalence to the buggy unmodified engine.
+
+Ecology elapsed time: 95.47 seconds. SD in the experiment scripts uses division by n; these are descriptive samples, with no significance or generalization claim.
 
 **Confounds and limits:** simultaneous fixes change emergency targets and action-family probabilities; these runs do not identify each fix’s separate contribution. Candidate availability, fixed priors, spatial binning, competition and shaped rewards remain engineered influences. Frozen/ablated worlds start untrained; trained-weight retention is tested separately. Seeds pair initial conditions, but changed choices diverge world RNG consumption through navigation/ecology, so later environments are not identical exposures. Five thousand ticks do not cover a full lifespan, extinction risk, long-term learning stability or storage growth. Survival reflexes are counted separately from model decisions; a later update after a reflex is an exposure, not evidence of learned selection.
 
@@ -50,22 +61,22 @@ The following completed fallback runs have **no requested resource enforcement**
 
 | Mode | Initial → final creatures | Clients | Cadence | Measured runtime s | Process runtime s | Peak RSS MiB | Tick p95 / p99 ms | CPU ms/tick |
 |---|---|---|---|---|---|---|---|---|
-| legacy | 24 → 30 | 8 | accelerated | 2.99 | 3.89 | 133.17 | 1.505 / 17.545 | 2.562 |
-| legacy | 100 → 100 | 8 | accelerated | 6.50 | 8.39 | 276.76 | 3.426 / 30.836 | 5.787 |
-| legacy | 250 → 250 | 8 | accelerated | 17.35 | 21.48 | 357.22 | 8.251 / 72.353 | 16.780 |
-| mb-v1 | 24 → 26 | 8 | accelerated | 2.87 | 3.78 | 137.33 | 1.636 / 20.123 | 2.541 |
-| mb-v1 | 100 → 100 | 8 | accelerated | 7.66 | 9.73 | 288.59 | 3.631 / 57.437 | 6.680 |
-| mb-v1 | 250 → 250 | 8 | accelerated | 19.58 | 24.45 | 421.79 | 8.369 / 142.152 | 17.169 |
-| mb-v1-frozen | 24 → 26 | 8 | accelerated | 2.75 | 3.65 | 138.06 | 1.621 / 17.671 | 2.344 |
-| mb-v1-frozen | 100 → 100 | 8 | accelerated | 7.62 | 9.78 | 281.69 | 3.657 / 53.648 | 6.744 |
-| mb-v1-frozen | 250 → 250 | 8 | accelerated | 18.64 | 24.21 | 415.64 | 8.260 / 124.564 | 16.184 |
-| mb-v1-ablated | 24 → 26 | 8 | accelerated | 2.80 | 3.65 | 134.36 | 1.523 / 18.242 | 2.449 |
-| mb-v1-ablated | 100 → 100 | 8 | accelerated | 7.59 | 9.70 | 294.54 | 3.549 / 53.473 | 6.727 |
-| mb-v1-ablated | 250 → 250 | 8 | accelerated | 18.28 | 23.09 | 419.88 | 8.228 / 124.292 | 15.774 |
-| mb-v1 | 24 → 24 | 8 | 1 second | 179.12 | 179.36 | 97.31 | 8.739 / 16.339 | 7.087 |
-| mb-v1 | 100 → 100 | 8 | 1 second | 179.17 | 179.50 | 144.05 | 13.682 / 51.064 | 12.166 |
-| mb-v1 | 250 → 250 | 8 | 1 second | 179.22 | 179.80 | 216.90 | 20.113 / 133.666 | 37.490 |
-| mb-v1 | 250 → 250 | 32 | accelerated | 48.71 | 62.55 | 433.16 | 18.973 / 145.154 | 50.819 |
+| legacy | 24 → 30 | 8 | accelerated | 2.73 | 3.65 | 133.94 | 1.761 / 13.842 | 2.260 |
+| legacy | 100 → 100 | 8 | accelerated | 6.65 | 8.52 | 277.69 | 3.320 / 30.619 | 5.676 |
+| legacy | 250 → 250 | 8 | accelerated | 14.74 | 18.47 | 371.39 | 6.616 / 61.644 | 12.985 |
+| mb-v1 | 24 → 26 | 8 | accelerated | 2.61 | 3.48 | 138.54 | 1.519 / 17.476 | 2.334 |
+| mb-v1 | 100 → 100 | 8 | accelerated | 7.76 | 9.79 | 305.04 | 3.743 / 56.390 | 6.863 |
+| mb-v1 | 250 → 250 | 8 | accelerated | 18.44 | 22.86 | 427.42 | 7.705 / 130.482 | 16.115 |
+| mb-v1-frozen | 24 → 26 | 8 | accelerated | 2.59 | 3.41 | 137.43 | 1.479 / 15.356 | 2.271 |
+| mb-v1-frozen | 100 → 100 | 8 | accelerated | 6.85 | 8.78 | 286.40 | 3.163 / 45.328 | 5.994 |
+| mb-v1-frozen | 250 → 250 | 8 | accelerated | 16.78 | 20.99 | 417.07 | 7.120 / 111.699 | 14.292 |
+| mb-v1-ablated | 24 → 26 | 8 | accelerated | 2.74 | 3.69 | 136.63 | 1.653 / 17.046 | 2.238 |
+| mb-v1-ablated | 100 → 100 | 8 | accelerated | 7.94 | 10.01 | 285.23 | 4.254 / 54.555 | 6.990 |
+| mb-v1-ablated | 250 → 250 | 8 | accelerated | 18.49 | 23.09 | 416.68 | 8.697 / 121.926 | 16.117 |
+| mb-v1 | 24 → 24 | 8 | 1 second | 179.13 | 179.35 | 97.26 | 8.546 / 21.674 | 6.859 |
+| mb-v1 | 100 → 100 | 8 | 1 second | 179.16 | 179.53 | 141.62 | 8.637 / 49.703 | 12.143 |
+| mb-v1 | 250 → 250 | 8 | 1 second | 179.25 | 179.74 | 209.89 | 22.309 / 125.091 | 39.408 |
+| mb-v1 | 250 → 250 | 32 | accelerated | 48.67 | 60.47 | 441.66 | 24.531 / 148.554 | 51.477 |
 
 Completed rows: 16 / 16. Platform, Node version, source hashes, tick durations/intervals, every client’s final tick, delta sizes, inspector payloads, population changes, process CPU/RSS and observed cgroup counters are retained with each row. Observed host cgroup counters do not demonstrate the requested limits. **Supported capacity on the 1 GB x86_64 VPS: not established.** Validate the real Docker matrix there before choosing a supported population/client ceiling. There is no automatic population cap.
 
