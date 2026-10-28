@@ -1,4 +1,4 @@
-import { brainInspection } from './controller.js';
+import { brainInspection, plasticityEnabled } from './controller.js';
 // Rendering-facing projection of the world. The simulation never depends on this module.
 import { shortAddr } from './wallet.js';
 const r2 = (n) => Math.round(n * 100) / 100, r1 = (n) => Math.round(n * 10) / 10;
@@ -41,7 +41,7 @@ export function creatureDetail(w, c) {
     memories: c.memories.slice(-20).reverse(), decisions: c.decisions.slice().reverse(), speech: c.speech.slice().reverse(),
     walletOpinions: Object.entries(c.brain.wallets).map(([a, e]) => ({ wallet: shortAddr(a), value: r2(e.v), interactions: e.n, lastTick: e.last })),
     knownFood: c.places.food.length,
-    learning: { enabled: w.learning, updates: c.brain.updates, meanReward: c.brain.rewardN ? r2(c.brain.rewardSum / c.brain.rewardN) : 0, topWeights: topWeights(c) },
+    learning: { enabled: plasticityEnabled(w), updates: c.brain.updates, meanReward: c.brain.rewardN ? r2(c.brain.rewardSum / c.brain.rewardN) : 0, topWeights: topWeights(c) },
     note: 'Speech bubbles are template-generated from simulation events; they are not model output.',
   };
 }

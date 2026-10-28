@@ -57,7 +57,7 @@ export function experiment(seed, mode, task = 'location') {
     }
     w.learning = prev;
     const after = JSON.stringify(mode === 'legacy' ? c.brain.w : [c.brain.mb.positive, c.brain.mb.negative]);
-    return { phase, trials: n, fractionGood: mean(selections.map(s => +s.good)), autonomousFractionGood: mean(selections.filter(s => !s.forced).map(s => +s.good)), meanReward: mean(rewards), weightsChanged: before !== after, weightsBeforeSha256: digest(before), weightsAfterSha256: digest(after), rngBefore, rngAfter: mode === 'legacy' ? w.rng.s : c.brain.mb.rng, rewards,
+    return { phase, trials: n, neuralUpdates: c.brain.mb?.updates ?? 0, legacyUpdates: c.brain.updates, fractionGood: mean(selections.map(s => +s.good)), autonomousFractionGood: mean(selections.filter(s => !s.forced).map(s => +s.good)), meanReward: mean(rewards), weightsChanged: before !== after, weightsBeforeSha256: digest(before), weightsAfterSha256: digest(after), rngBefore, rngAfter: mode === 'legacy' ? w.rng.s : c.brain.mb.rng, rewards,
       choices: selections.map(s => s.site), forcedTrials: selections.flatMap((s, i) => s.forced ? [i] : []) };
   }
   const baseline = trial('baseline-heldout', 100, false);
@@ -92,9 +92,12 @@ export function runExperiments(seeds = 10) {
   return { protocol: { seeds: Array.from({ length: seeds }, (_, i) => i + 1), modelParameters: 'server/src/mushroom.js:MB_PARAMS', acquisitionTrials: 300, reversalTrials: 400, trainingNoise: 0.1, forcedExposureFraction: 0.2, heldoutLearning: false, heldoutHunger: 0.45, trainingHunger: 0.4, task: 'synthetic two-site component task with equal innate scores; no reflexes' }, summary, rows };
 }
 if (process.argv[1] === new URL(import.meta.url).pathname) {
+  const started = performance.now();
   const results = runExperiments(Number(process.argv[2] ?? 10));
+  results.elapsedMs = performance.now() - started;
+  results.sourceHashes = Object.fromEntries(['actions', 'controller', 'mushroom', 'brain', 'config', 'world'].map(name => [name, digest(fs.readFileSync(new URL(`../../server/src/${name}.js`, import.meta.url), 'utf8'))]));
   fs.mkdirSync(new URL('../results/phase2a/', import.meta.url), { recursive: true });
-  fs.writeFileSync(new URL('../results/phase2a/learning.json', import.meta.url), JSON.stringify(results) + '\n');
+  fs.writeFileSync(process.argv[3] ?? new URL('../results/phase2a/learning.json', import.meta.url), JSON.stringify(results) + '\n');
   console.table(results.summary);
   if (results.rows.some(r => !r.restartStateIdentical || !r.restartChoicesIdentical || r.phases.some(p => p.phase.includes('heldout') && p.weightsChanged))) process.exitCode = 1;
 }

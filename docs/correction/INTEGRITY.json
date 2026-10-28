@@ -1,0 +1,415 @@
+{
+  "passed": true,
+  "baseline": "99e50b1c275b9422c14f279498b3e192b151992b",
+  "checkoutCommit": "99e50b1c275b9422c14f279498b3e192b151992b",
+  "sourceTreeSha256": "3e08a9162041fd932650899fe4d5f6acf2b42ce0e46b4947081926308e618c31",
+  "exportTreeSha256": "2b5943824854d7e31be77eb60bd2ae9ae68927a476ce8db6444b5b5e1e29f665",
+  "computedCid": "bafybeiekdihlrxcm4nhj223jm2bj3hjc3j2woz45cdlc7xubk6y3nkolbm",
+  "publicHttpsVerified": false,
+  "dockerVerified": false,
+  "contributionBytes": 7485042,
+  "reserveBytes": 903566,
+  "limitBytes": 8388608,
+  "evidencePathBytes": 2964970,
+  "evidencePathLimitBytes": 3145728,
+  "staticFiles": 19,
+  "capacityRows": 16,
+  "files": [
+    {
+      "file": "DESIGN.md",
+      "bytes": 8321
+    },
+    {
+      "file": "README.md",
+      "bytes": 7997
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/browser-install.txt",
+      "bytes": 11178
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/build.txt",
+      "bytes": 1379
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/capacity.txt",
+      "bytes": 846
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/chromium.txt",
+      "bytes": 1384
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/chromium/brain-390.jpg",
+      "bytes": 41590
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/chromium/checks.json",
+      "bytes": 11298
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/chromium/downloaded-experiment.json.gz",
+      "bytes": 4601
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/chromium/first-screen-390.jpg",
+      "bytes": 41143
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/chromium/keyboard-primary-390.jpg",
+      "bytes": 42319
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/chromium/lab-390.jpg",
+      "bytes": 38676
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/chromium/lab-landscape-667.jpg",
+      "bytes": 23762
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/chromium/reversal-390.jpg",
+      "bytes": 44711
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/chromium/shared-decision.json",
+      "bytes": 5879
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/ecology.txt",
+      "bytes": 5188
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/https.txt",
+      "bytes": 2114
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/integrity.txt",
+      "bytes": 0
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/learning.txt",
+      "bytes": 10410
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/original-regressions.tap",
+      "bytes": 52690
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/package-tests.tap",
+      "bytes": 24142
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/package.txt",
+      "bytes": 162
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/regressions.tap",
+      "bytes": 7394
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/release-build.txt",
+      "bytes": 219
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/server-tests.tap",
+      "bytes": 24140
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/taste-command.json",
+      "bytes": 3268
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/taste.json",
+      "bytes": 35987
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/typecheck.txt",
+      "bytes": 51
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/web-tests.tap",
+      "bytes": 1772
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/webkit.txt",
+      "bytes": 1384
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/webkit/brain-390.jpg",
+      "bytes": 42293
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/webkit/checks.json",
+      "bytes": 11288
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/webkit/downloaded-experiment.json.gz",
+      "bytes": 4601
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/webkit/first-screen-390.jpg",
+      "bytes": 36528
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/webkit/keyboard-primary-390.jpg",
+      "bytes": 37676
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/webkit/lab-390.jpg",
+      "bytes": 36410
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/webkit/lab-landscape-667.jpg",
+      "bytes": 17397
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/webkit/reversal-390.jpg",
+      "bytes": 45614
+    },
+    {
+      "file": "artifacts/phase2a-client/correction/webkit/shared-decision.json",
+      "bytes": 5879
+    },
+    {
+      "file": "deploy/correction-benchmark.Dockerfile",
+      "bytes": 405
+    },
+    {
+      "file": "deploy/correction-client.car.gz",
+      "bytes": 684893
+    },
+    {
+      "file": "deploy/correction-vps-compose.yml",
+      "bytes": 862
+    },
+    {
+      "file": "deploy/correction-vps.tar.gz",
+      "bytes": 2110931
+    },
+    {
+      "file": "deploy/phase2a-demo/circuit/mushroom.js",
+      "bytes": 4925
+    },
+    {
+      "file": "dist/assets/demo.worker-DHYRM8He.js",
+      "bytes": 52203
+    },
+    {
+      "file": "dist/assets/dist-D-rrROUx.js",
+      "bytes": 102687
+    },
+    {
+      "file": "dist/assets/index-Bht3Huoh.js",
+      "bytes": 414807
+    },
+    {
+      "file": "dist/assets/learning.worker-UgPnZp2E.js",
+      "bytes": 51914
+    },
+    {
+      "file": "dist/index.html",
+      "bytes": 1085
+    },
+    {
+      "file": "docs/correction/HTTPS.json",
+      "bytes": 2114
+    },
+    {
+      "file": "docs/correction/INTEGRITY.json",
+      "bytes": 10263
+    },
+    {
+      "file": "docs/correction/PACKAGE.json",
+      "bytes": 33213
+    },
+    {
+      "file": "docs/correction/PUBLICATION.md",
+      "bytes": 3928
+    },
+    {
+      "file": "docs/correction/RELEASE.json",
+      "bytes": 18744
+    },
+    {
+      "file": "docs/correction/RESULTS.md",
+      "bytes": 8523
+    },
+    {
+      "file": "docs/correction/VALIDATION.md",
+      "bytes": 13933
+    },
+    {
+      "file": "docs/correction/VPS.md",
+      "bytes": 8334
+    },
+    {
+      "file": "docs/correction/screens/chromium-brain-1440.jpg",
+      "bytes": 127029
+    },
+    {
+      "file": "docs/correction/screens/webkit-brain-1440.jpg",
+      "bytes": 131251
+    },
+    {
+      "file": "server/src/actions.js",
+      "bytes": 24819
+    },
+    {
+      "file": "server/src/controller.js",
+      "bytes": 4037
+    },
+    {
+      "file": "server/src/mushroom.js",
+      "bytes": 4925
+    },
+    {
+      "file": "server/src/view.js",
+      "bytes": 4065
+    },
+    {
+      "file": "shared/brain-v1.md",
+      "bytes": 6313
+    },
+    {
+      "file": "tests/brain-correction.test.js",
+      "bytes": 9865
+    },
+    {
+      "file": "tests/experiments/check-correction.mjs",
+      "bytes": 5191
+    },
+    {
+      "file": "tests/experiments/mushroom-ecology.mjs",
+      "bytes": 2963
+    },
+    {
+      "file": "tests/experiments/mushroom-learning.mjs",
+      "bytes": 7480
+    },
+    {
+      "file": "tests/experiments/package-correction.py",
+      "bytes": 3299
+    },
+    {
+      "file": "tests/experiments/report-correction.mjs",
+      "bytes": 10145
+    },
+    {
+      "file": "tests/experiments/reproduce-correction.mjs",
+      "bytes": 1844
+    },
+    {
+      "file": "tests/load/brain-capacity.mjs",
+      "bytes": 7377
+    },
+    {
+      "file": "tests/load/correction-docker.mjs",
+      "bytes": 6137
+    },
+    {
+      "file": "tests/results/correction/capacity/legacy-100-8-accelerated.json",
+      "bytes": 82083
+    },
+    {
+      "file": "tests/results/correction/capacity/legacy-24-8-accelerated.json",
+      "bytes": 81753
+    },
+    {
+      "file": "tests/results/correction/capacity/legacy-250-8-accelerated.json",
+      "bytes": 81761
+    },
+    {
+      "file": "tests/results/correction/capacity/mb-v1-100-8-accelerated.json",
+      "bytes": 81952
+    },
+    {
+      "file": "tests/results/correction/capacity/mb-v1-100-8-realtime.json",
+      "bytes": 15685
+    },
+    {
+      "file": "tests/results/correction/capacity/mb-v1-24-8-accelerated.json",
+      "bytes": 81847
+    },
+    {
+      "file": "tests/results/correction/capacity/mb-v1-24-8-realtime.json",
+      "bytes": 15534
+    },
+    {
+      "file": "tests/results/correction/capacity/mb-v1-250-32-accelerated.json",
+      "bytes": 82575
+    },
+    {
+      "file": "tests/results/correction/capacity/mb-v1-250-8-accelerated.json",
+      "bytes": 81741
+    },
+    {
+      "file": "tests/results/correction/capacity/mb-v1-250-8-realtime.json",
+      "bytes": 15654
+    },
+    {
+      "file": "tests/results/correction/capacity/mb-v1-ablated-100-8-accelerated.json",
+      "bytes": 81940
+    },
+    {
+      "file": "tests/results/correction/capacity/mb-v1-ablated-24-8-accelerated.json",
+      "bytes": 81840
+    },
+    {
+      "file": "tests/results/correction/capacity/mb-v1-ablated-250-8-accelerated.json",
+      "bytes": 81703
+    },
+    {
+      "file": "tests/results/correction/capacity/mb-v1-frozen-100-8-accelerated.json",
+      "bytes": 82021
+    },
+    {
+      "file": "tests/results/correction/capacity/mb-v1-frozen-24-8-accelerated.json",
+      "bytes": 81869
+    },
+    {
+      "file": "tests/results/correction/capacity/mb-v1-frozen-250-8-accelerated.json",
+      "bytes": 81795
+    },
+    {
+      "file": "tests/results/correction/capacity/status.json",
+      "bytes": 4334
+    },
+    {
+      "file": "tests/results/correction/docker/status.json",
+      "bytes": 324
+    },
+    {
+      "file": "tests/results/correction/ecology.json",
+      "bytes": 36268
+    },
+    {
+      "file": "tests/results/correction/learning.json",
+      "bytes": 1682112
+    },
+    {
+      "file": "web/scripts/check-correction-https.mjs",
+      "bytes": 3190
+    },
+    {
+      "file": "web/scripts/check-phase2a.mjs",
+      "bytes": 20424
+    },
+    {
+      "file": "web/scripts/release-correction.mjs",
+      "bytes": 5855
+    },
+    {
+      "file": "web/src/BrainBehavior.tsx",
+      "bytes": 7275
+    },
+    {
+      "file": "web/src/Panels.tsx",
+      "bytes": 36136
+    },
+    {
+      "file": "web/src/types.ts",
+      "bytes": 5176
+    }
+  ]
+}

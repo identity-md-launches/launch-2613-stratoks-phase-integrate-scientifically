@@ -57,11 +57,31 @@ export function reinforce(mb, action, trace, reward, tick, enabled, source = 'mo
   if (mb.rewardHistory.length > MB_PARAMS.history) mb.rewardHistory.shift();
 }
 export function pickMushroom(mb, candidates, temperature) {
+  if (!candidates.length) throw new Error('cannot select from empty candidates');
   const rng = new Rng(1); rng.s = mb.rng;
-  const max = Math.max(...candidates.map(c => c.u));
-  const weights = candidates.map(c => Math.exp((c.u - max) / temperature));
+  // Hierarchy: P(action) = softmax(max target utility per action), then
+  // P(target | action) = softmax(target utility). Repeating a target cannot
+  // buy action mass. Learned utilities still affect both stages. One uniform
+  // draw is partitioned by action, then by target; its state remains persistent.
+  // Candidates without an action label (the standalone two-site lab) share a group.
+  const groups = new Map();
+  for (const c of candidates) {
+    if (!groups.has(c.a)) groups.set(c.a, []);
+    groups.get(c.a).push(c);
+  }
+  const actions = [...groups.values()].map(targets => ({ targets, u: Math.max(...targets.map(c => c.u)) }));
+  const max = Math.max(...actions.map(a => a.u));
+  const weights = actions.map(a => Math.exp((a.u - max) / temperature));
   let r = rng.next() * weights.reduce((s, v) => s + v, 0);
   mb.rng = rng.s;
-  for (let i = 0; i < weights.length; i++) { r -= weights[i]; if (r <= 0) return candidates[i]; }
-  return candidates.at(-1);
+  for (let i = 0; i < actions.length; i++) {
+    if (r <= weights[i] || i === actions.length - 1) {
+      const { targets, u } = actions[i];
+      const targetWeights = targets.map(c => Math.exp((c.u - u) / temperature));
+      let t = r / weights[i] * targetWeights.reduce((s, v) => s + v, 0);
+      for (let j = 0; j < targets.length; j++) { t -= targetWeights[j]; if (t <= 0) return targets[j]; }
+      return targets.at(-1);
+    }
+    r -= weights[i];
+  }
 }

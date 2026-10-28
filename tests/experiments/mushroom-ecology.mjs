@@ -4,6 +4,7 @@ import crypto from 'node:crypto';
 import { World } from '../../server/src/world.js';
 import { DEFAULTS, deepMerge } from '../../server/src/config.js';
 const ticks = Number(process.argv[2] ?? 5000), seeds = Number(process.argv[3] ?? 10);
+const started = performance.now();
 const rows = [];
 for (let seed = 1; seed <= seeds; seed++) {
   const baseline = World.create(deepMerge(DEFAULTS, { world: { seed } })).toState();
@@ -34,5 +35,6 @@ const summary=[];
 for(const mode of ['legacy','mb-v1','mb-v1-frozen','mb-v1-ablated']) for(const metric of ['population','births','deaths','food','sheltersComplete','hungryFraction']) {
  const values=rows.filter(r=>r.mode===mode).map(r=>r[metric]);summary.push({mode,metric,mean:mean(values),sd:sd(values),min:Math.min(...values),max:Math.max(...values)});
 }
-fs.writeFileSync(new URL('../results/phase2a/ecology.json',import.meta.url),JSON.stringify({ protocol:{ticks,seeds,initialPopulation:24,worldConfig:DEFAULTS.world,interventions:'none',learningTrials:'none; entirely autonomous ecology'},summary,rows },null,2)+'\n');
+const sourceHashes = Object.fromEntries(['actions', 'controller', 'mushroom', 'brain', 'config', 'world'].map(name => [name, crypto.createHash('sha256').update(fs.readFileSync(new URL(`../../server/src/${name}.js`, import.meta.url))).digest('hex')]));
+fs.writeFileSync(process.argv[4] ?? new URL('../results/phase2a/ecology.json',import.meta.url),JSON.stringify({ elapsedMs: performance.now() - started, sourceHashes, protocol:{ticks,seeds,initialPopulation:24,worldConfig:DEFAULTS.world,interventions:'none',learningTrials:'none; entirely autonomous ecology'},summary,rows },null,2)+'\n');
 console.table(summary);

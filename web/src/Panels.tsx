@@ -400,11 +400,11 @@ export function Inspector({
         <>
           <BrainBehavior detail={detail} local={state.mode === "demo"} stale={!!error || !["connected", "demo"].includes(state.mode)} onLab={onLab} />
           <details className="brain-disclosure">
-          <summary>Legacy learning archive</summary>
-          <p className="fineprint">Original linear weights and decision history are retained. These update counts are separate from the new circuit. Mean reward includes all completed actions.</p>
+          <summary>Learning history</summary>
+          <p className="fineprint">Linear-policy updates count retained changes to the original weights, separately from circuit updates. Recent decisions span active policies. Mean reward includes all completed actions.</p>
           <dl className="facts">
             <div>
-              <dt>Learning updates</dt>
+              <dt>Linear-policy updates</dt>
               <dd>{number(detail?.learning.updates)}</dd>
             </div>
             <div>
@@ -421,7 +421,7 @@ export function Inspector({
             <div className="decision" key={`${d.tick}-${i}`}>
               <strong>{actionName(d.action)}</strong>
               <span className="small muted">
-                Tick {number(d.tick)} · preference {d.utility}
+                Tick {number(d.tick)} · utility {d.utility}
               </span>
               <p className="small">
                 {d.why
@@ -455,7 +455,7 @@ export function Inspector({
             </p>
           )}
           <p className="fineprint">
-            Preferences are learned values, not feelings or consciousness.
+            Scores combine policy values and game rules; they do not imply feelings or consciousness.
             Speech uses event-triggered templates.
           </p>
         </>

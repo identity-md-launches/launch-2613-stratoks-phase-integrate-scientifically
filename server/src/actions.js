@@ -29,6 +29,13 @@ function nearestFood(w, c) {
   }
   return best ? { m: best, d: bd } : null;
 }
+function emergencyFood(w, c) {
+  // Survival uses distance, never learned utility or candidate insertion order.
+  // Check reachability without consuming either RNG. Ties use the stable food id.
+  const known = c.places.food.filter(m => m.amount >= 0.5)
+    .sort((a, b) => dist(c, a) - dist(c, b) || a.id - b.id);
+  return known.find(m => w.walkable(m.x, m.y) && w.findPath(c.x, c.y, m.x, m.y, false) !== null);
+}
 function nearest(list, c, ok = () => true) {
   let best = null, bd = Infinity;
   for (const o of list) { if (!ok(o)) continue; const d = dist(c, o); if (d < bd) { bd = d; best = o; } }
@@ -101,10 +108,17 @@ export function decide(w, c) {
   let pick, source = 'reflex';
   if (haz.danger > 0.8) pick = cand.find((x) => x.a === 'FLEE');
   else if (c.hunger >= 55 && !food && !haz.danger) { pick = { a: 'WANDER', ...scoreCandidate(w, c, 'WANDER', f), far: true }; source = 'rule'; } // foraging search when no known food
-  else if (c.hunger >= 80 && food) pick = cand.find((x) => x.a === 'EAT'); // survival reflex: learning cannot talk a creature out of eating when starving
+  else if (c.hunger >= 80 && food) {
+    const target = emergencyFood(w, c);
+    if (target) {
+      pick = cand.find(x => x.a === 'EAT' && x.food.m.id === target.id);
+      // A reachable remembered site can be outside the local learned candidate set.
+      if (!pick) { add('EAT', { food: { m: target, d: dist(c, target) } }); pick = cand.at(-1); }
+    } else { pick = { ...cand.find(x => x.a === 'WANDER'), far: true }; source = 'rule'; }
+  }
   else if (c.energy < 8) pick = cand.find((x) => x.a === 'REST');
   else { pick = selectCandidate(w, c, cand); source = 'model'; }
-  c.brain.inspection = { tick: w.tick, source, selectedAction: pick.a, selectedTarget: pick.food?.m.id ?? null,
+  c.brain.inspection = { tick: w.tick, mode: w.brainMode ?? 'legacy', source, selectedAction: pick.a, selectedTarget: pick.food?.m.id ?? null,
     sensed: pick.sensed ?? { features: f }, activeKCs: pick.trace?.active ?? [],
     candidates: cand.map(x => ({ action: x.a, target: x.food?.m.id ?? null, score: x.u, innate: x.innate ?? null, preference: x.preference ?? null })) };
   pick.source = source;

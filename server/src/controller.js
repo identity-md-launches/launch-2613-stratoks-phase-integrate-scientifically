@@ -45,14 +45,19 @@ export function rewardAction(w, c, act, reward) {
     if (enabled) learn(c.brain, act.type, act.f, act.u, reward, w.cfg.world.learningRate);
     else { c.brain.rewardSum += reward; c.brain.rewardN++; }
   } else {
-    reinforce(c.brain.mb, act.type, act.trace, reward, w.tick, enabled && mode !== 'mb-v1-frozen', act.decisionSource ?? 'model');
+    reinforce(c.brain.mb, act.type, act.trace, reward, w.tick, enabled && mode === 'mb-v1', act.decisionSource ?? 'model');
+    const outcome = c.brain.mb.rewardHistory.at(-1);
+    if (outcome) { outcome.mode = mode; if (mode === 'mb-v1-ablated') outcome.prediction = 0; }
     c.brain.rewardSum += reward; c.brain.rewardN++;
   }
+}
+export function plasticityEnabled(w) {
+  return !!w.learning && !w.catchup && ['legacy', 'mb-v1'].includes(w.brainMode ?? 'legacy');
 }
 export function brainInspection(w, c) {
   const mb = c.brain.mb;
   return { interfaceVersion: 1, mode: w.brainMode ?? 'legacy', circuitVersion: mb?.version ?? null,
-    learningEnabled: w.learning && w.brainMode !== 'mb-v1-frozen', updates: w.brainMode === 'legacy' ? c.brain.updates : mb?.updates ?? 0,
+    learningEnabled: plasticityEnabled(w), updates: (w.brainMode ?? 'legacy') === 'legacy' ? c.brain.updates : mb?.updates ?? 0,
     decision: c.brain.inspection ?? null, rewardHistory: mb?.rewardHistory ?? [],
     note: 'Reduced fly-inspired circuit. Game actions, spatial cues, personality and wallet memory are engineered abstractions.' };
 }

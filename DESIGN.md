@@ -60,7 +60,7 @@ The established panel shadow is `--shadow: 0 8px 32px #243e3020`; the welcome su
 
 - `WorldCanvas` and `renderer.ts`: original scene, selection, pan/zoom, creature animation and template speech. The same engine supplies local and server observations.
 - `SidePanel` in `Panels.tsx`: heading focus on entry, labeled aside, Escape and close control, persistent panel head and scrollable body.
-- `Inspector`: existing Needs, Memories and Learning segments. `BrainBehavior` reads the optional version-1 server contract, shows explicit unavailable/loading/stale states, and preserves the legacy archive and wallet-memory presentation.
+- `Inspector`: existing Needs, Memories and Learning segments. `BrainBehavior` reads the optional version-1 server contract and shows unavailable/loading/stale states. **Learning history** groups retained **Linear-policy updates**, aggregate mean reward and recent decisions spanning policies. Current policy plasticity, decision source, historical action mode and separate wallet-memory policy have explicit text. Frozen/ablated outcomes say **No weight update**; retained earlier outcomes keep their recorded facts.
 - `LearningLab`: labeled scenario and seed fields; reset, train, held-out evaluation, reversal and ablation controls; worker-busy disabled states; stable status region; retryable errors; measured result meters and a JSON download. Data lives only in its worker.
 - `Modal`: native dialog, Escape/backdrop close, Tab handling and focus return. Settings and the unchanged wallet sheet reuse it.
 - Existing `primary`, `secondary`, `text-button`, `icon-button`, `notice`, `facts`, `fineprint` and `error` styles remain the reuse points. The lab has one filled primary action; other operations use secondary buttons.
@@ -72,5 +72,7 @@ Buttons use the existing 150ms transition language. The Phase 2A panels add no a
 ## Responsive behavior & verification
 
 Production-export checks cover 320, 390, 800 and 1440px widths and 667×375 landscape for the new panels, with screenshots and actual interactions. The entry page is checked by taste@1 at 320, 390 and 1440. The current validation report distinguishes browser measurements, automated accessibility scans, native-device/screen-reader limitations and historical evidence. Do not infer complete accessibility conformance from a passing scan.
+
+The correction preserves every color, type, spacing and component token above. It changes inspector meaning and disclosure copy, with no visual redesign, art or payment integration. Reuse `.brain-disclosure` for bounded technical detail; put the actual decision source before scores, keep historical counters labeled by policy, and never use a reflex as evidence of learned selection. Do not add a new type size or status color for another brain mode. Current coverage and applicable findings are in `docs/correction/VALIDATION.md`; earlier screenshots/reports remain historical.
 
 Design methods: Better Interface by Jakub Krehel, pinned `267330e1adfc66a718fb65fa6918c1f06d0a689e` (MIT), and Impeccable documentation guidance by Paul Bakaus, pinned `9d715cc4f5564a990ca8345abfdd5df6dc9b41c8` (Apache-2.0). Original notices remain in `docs/licenses/design-guidance.txt`.

@@ -181,6 +181,7 @@ export type BrainBehavior = {
   updates: number;
   decision: {
     tick: number;
+    mode?: string;
     source: "reflex" | "rule" | "model";
     selectedAction: string;
     selectedTarget: number | null;
@@ -188,7 +189,7 @@ export type BrainBehavior = {
     activeKCs: number[];
     candidates: { action: string; target: number | null; score: number; innate: number | null; preference: number | null }[];
   } | null;
-  rewardHistory: { tick: number; action: string; reward: number; prediction: number | null; learned: boolean; source: string }[];
+  rewardHistory: { tick: number; mode?: string; action: string; reward: number; prediction: number | null; learned: boolean; source: string }[];
   note: string;
 };
 export type Session = {

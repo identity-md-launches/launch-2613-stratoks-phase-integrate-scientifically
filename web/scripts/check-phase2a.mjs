@@ -12,6 +12,8 @@ import { Service } from '../../server/src/service.js';
 import { DEFAULTS, deepMerge } from '../../server/src/config.js';
 import { createServer } from '../../server/src/http.js';
 import { creatureDetail } from '../../server/src/view.js';
+import { setBrainMode } from '../../server/src/controller.js';
+import { decide } from '../../server/src/actions.js';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const project = spawnSync('node', ['web/scripts/task.mjs', 'path'], { cwd: root, encoding: 'utf8' }).stdout.trim();
@@ -121,6 +123,24 @@ try {
   results.observations.shared = { worldId: svc.world.id, tick: svc.world.tick, creatureId: creature.id, brain: expected, sha256: hash(expected), clients: svc.clients.size };
   await fs.writeFile(path.join(out, 'shared-decision.json'), JSON.stringify(results.observations.shared, null, 2) + '\n');
   pass('two independent real browser clients display the same authoritative decision and candidate scores');
+  for (const mode of ['legacy', 'mb-v1-frozen', 'mb-v1-ablated', 'mb-v1']) {
+    setBrainMode(svc.world, mode, 'isolated-browser-test');
+    creature.act = null; decide(svc.world, creature);
+    const actual = creatureDetail(svc.world, creature).brainBehavior;
+    for (const page of pages) {
+      const panel = page.locator(`[data-brain-mode="${mode}"]`); await panel.waitFor();
+      assert.equal(await panel.getAttribute('data-selected-action'), actual.decision.selectedAction);
+      assert.equal(await panel.locator('.brain-table tbody tr').count(), actual.decision.candidates.length);
+      assert((await panel.innerText()).includes(`Policy learning ${actual.learningEnabled ? 'enabled' : 'disabled'}`));
+      assert.equal(actual.learningEnabled, !['mb-v1-frozen', 'mb-v1-ablated'].includes(mode));
+      if (mode === 'mb-v1-ablated') assert(actual.decision.candidates.every(c => c.preference === 0));
+      await page.getByText('Learning history', { exact: true }).click();
+      assert(await page.getByText('Linear-policy updates', { exact: true }).isVisible());
+      assert(await page.getByText(/Recent decisions span active policies/).isVisible());
+      await page.getByText('Learning history', { exact: true }).click();
+    }
+  }
+  pass('all four policy modes show accurate plasticity, candidate output and Learning history in both clients');
   for (let i = 0; i < 24; i++) svc.tickOnce();
   for (const page of pages) await page.waitForFunction(tick => Number(document.querySelector('.app').dataset.worldTick) === tick, svc.world.tick);
   pass('both real WebSocket clients observe subsequent server ticks');

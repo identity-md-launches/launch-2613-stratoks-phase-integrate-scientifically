@@ -21,12 +21,12 @@ export function BrainBehavior({ detail, local, stale, onLab }: {
     <h3 className="section-heading">Brain / behavior</h3>
     <p className="small muted">{local ? "Private simulation" : "Read-only server"} · <strong>{brain.mode}</strong></p>
     {stale && <p className="notice" role="status">Last received details. The connection is interrupted; this view may be out of date.</p>}
-    <p className="small muted">Learning {brain.learningEnabled ? "enabled" : "frozen"} · {number(brain.updates)} updates</p>
+    <p className="small muted">Policy learning {brain.learningEnabled ? "enabled" : "disabled"} · {number(brain.updates)} updates</p>
     {d ? <>
       <div className="brain-selection">
-        <span className="small">{sources[d.source] ?? d.source} · tick {number(d.tick)}</span>
+        <span className="small">{sources[d.source] ?? d.source} · tick {number(d.tick)}{d.mode && d.mode !== brain.mode ? ` · ${d.mode}` : ""}</span>
         <strong>{actionName(d.selectedAction)}{d.selectedTarget !== null ? ` · food site #${d.selectedTarget}` : ""}</strong>
-        <p className="small">{d.source === "model" ? "Sampled from the candidate scores; the highest score is not always chosen." : "Selected by a survival rule, not evidence of learned preference."}</p>
+        <p className="small">{d.source === "model" ? "Sampled from policy scores; the highest score is not always chosen." : "Selected by a survival rule, not evidence of learned preference."}</p>
       </div>
       <p className="fineprint">Last decision, not a new choice each tick. A pending action can predate a mode change.</p>
       <details className="brain-disclosure">
@@ -41,10 +41,10 @@ export function BrainBehavior({ detail, local, stale, onLab }: {
       </details>
       <details className="brain-disclosure" open>
         <summary>Action candidates & preferences</summary>
-        <p className="fineprint">Total includes innate rules and personality. Association is the learned circuit output before its 2.5× gain; wallet opinions are separate game memory.</p>
+        <p className="fineprint">{(d.mode ?? brain.mode) === "legacy" ? "Totals use the linear policy and game rules. Circuit associations are unavailable in legacy decisions." : "Action probability uses its best target score, then targets are sampled by score. Association is the circuit output before its 2.5× gain; ablation sets it to zero."} Wallet opinions are separate game memory.</p>
         <CandidateTable brain={brain} />
       </details>
-      {brain.mode !== "legacy" && <details className="brain-disclosure">
+      {(d.mode ?? brain.mode) !== "legacy" && <details className="brain-disclosure">
         <summary>Sparse circuit activity</summary>
         <p className="small">{d.activeKCs.length} / 128 KC-like units active for the chosen input.</p>
         <p className="small">Unit indices: {d.activeKCs.join(", ") || "No circuit trace"}.</p>
@@ -54,14 +54,15 @@ export function BrainBehavior({ detail, local, stale, onLab }: {
     <details className="brain-disclosure">
       <summary>About this mode</summary>
       <p className="small">{brain.mode === "legacy" ? "Legacy linear policy. This mode is not a fly-inspired circuit." : "Reduced mushroom-body-inspired circuit. No full brain emulation or claim of consciousness."}</p>
-      {brain.mode === "mb-v1-ablated" && <p className="small">Ablated mode removes learned circuit output from scores. Stored weights remain intact.</p>}
+      {brain.mode === "mb-v1-ablated" && <p className="small">Ablated mode disables circuit updates and removes learned output from scores. Stored weights remain intact.</p>}
+      <p className="small">Wallet opinions follow the separate world learning setting, including in frozen and ablated modes.</p>
       <p className="small">Interface v{brain.interfaceVersion} · circuit {brain.circuitVersion ? `v${brain.circuitVersion}` : "not initialized"}. Personality, relationships, wallets and game actions are engineered abstractions.</p>
     </details>
     <details className="brain-disclosure" open>
       <summary>Recent rewards</summary>
       {brain.rewardHistory.length ? <ol className="brain-rewards">{[...brain.rewardHistory].reverse().map((r, i) => <li key={`${r.tick}-${i}`}>
         <div><strong>{actionName(r.action)}</strong><span>{signed(r.reward)}</span></div>
-        <p className="small muted">Tick {number(r.tick)} · {r.source} · {r.learned ? "Weights updated" : "No weight update"}</p>
+        <p className="small muted">Tick {number(r.tick)} · {r.mode ?? "Earlier mode unrecorded"} · {r.source} · {r.learned ? "Weights updated" : "No weight update"}</p>
         <p className="small muted">Predicted association: {signed(r.prediction)}</p>
       </li>)}</ol> : <p className="small muted">{brain.mode === "legacy" ? "Legacy mode does not record per-action circuit rewards. Its historical mean is shown below." : "No completed action rewards yet."}</p>}
       <p className="fineprint">Up to 16 circuit outcomes, which may predate a mode change. Positive means reward, negative means punishment. An update can follow a forced action.</p>

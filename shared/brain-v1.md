@@ -13,8 +13,8 @@ Server adapter (`server/src/controller.js`):
 - `initializeBrains(world)` validates and initializes only the selected circuit, without consuming global RNG.
 - `setBrainMode(world, mode, source)` changes the policy and emits the transition.
 - `scoreCandidate(world, creature, action, features, {target?,wallet?})` returns `{u, trace?, sensed?, preference?, innate?}`. Spatial/food candidates refer to already feasible local or remembered targets; the adapter does not add executable game actions.
-- `selectCandidate(world, creature, candidates)` selects an actual feasible candidate from scores.
-- `rewardAction(world, creature, storedAction, reward)` updates the matching policy only if learning is enabled, not catch-up, and the action's captured mode still matches the current mode. In-flight actions complete normally across mode changes; they cannot teach a newly selected mode.
+- `selectCandidate(world, creature, candidates)` keeps legacy softmax unchanged. Circuit modes use action/target hierarchy: softmax over the best target utility per action, then conditional softmax over that action's target scores. A single persisted random draw partitions both stages. Repeated targets cannot increase action mass; target associations still affect both stages.
+- `rewardAction(world, creature, storedAction, reward)` updates only `legacy` or `mb-v1`, when learning is enabled, not catch-up, and the action's captured mode still matches the current mode. Frozen and ablated modes never change circuit matrices or their update counter. Ablation also suppresses their contribution to scores. In-flight actions complete normally across mode changes; they cannot teach a newly selected mode.
 - `brainInspection(world, creature)` supplies bounded presentation data.
 
 Actual `decide → startAct → stepAct → endAct` calls this adapter; neither rendering nor clients choose server actions.
@@ -38,7 +38,11 @@ Actual `decide → startAct → stepAct → endAct` calls this adapter; neither 
 
 The mode is the currently selected policy; the last decision may predate an operator restart/mode change, and an already pending action can still be completing in its captured mode. When a decision exists it includes `tick`, `source` (`reflex|rule|model`), `selectedAction`, optional food `selectedTarget`, `sensed {features,x,y,width,height,cues,visible}`, `activeKCs` (max 8), and bounded `candidates [{action,target,score,innate,preference}]`. Legacy candidates have null circuit values. Legacy/forced selections can expose only the existing features when they have no circuit trace; no fabricated neural activity is shown.
 
-`rewardHistory` entries: `{tick,action,reward,prediction,learned,source}`. `prediction` is the pre-update circuit valence (null if no eligibility); `learned` means a weight update actually occurred. World metadata adds `brainMode`. WebSocket entity decisions remain authoritative; inspector details are polled separately on the existing rate-limited public read route. No per-tick weight matrices are broadcast.
+`learningEnabled` describes current policy plasticity: false in frozen/ablated modes, during catch-up or when `LEARNING=0`. It is independent of wallet-memory policy. New decisions add their captured `mode`; retained older decisions may lack it.
+
+`rewardHistory` entries: `{tick,action,reward,prediction,learned,source,mode?}`. New service outcomes include the captured action mode; old records remain intact. `prediction` is the pre-update circuit valence (null if no eligibility), or zero for an ablated action's suppressed contribution. `learned` means a weight update actually occurred, always false for new frozen/ablated outcomes. A retained outcome can truthfully record a previous mode's update. World metadata adds `brainMode`. WebSocket entity decisions remain authoritative; inspector details are polled separately on the existing rate-limited public read route. No per-tick weight matrices are broadcast.
+
+Starvation (`hunger >= 80`) selects the nearest reachable remembered full-enough food site by Euclidean distance, with numeric site id as deterministic tie break. It is explicitly a `reflex`, irrespective of target utility; if none is reachable, a `rule` searches for food. Non-emergency target choice remains model-selected. The separately documented wallet opinions retain the existing world `LEARNING` policy in both frozen and ablated modes. `learning.updates` remains the retained linear-policy count, `learning.meanReward` includes all completed rewarded actions, and recent decisions can span policies; the client groups these under **Learning history**.
 
 ## Bounds and isolation
 

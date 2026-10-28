@@ -8,6 +8,11 @@ import { Service } from '../../server/src/service.js';
 import { createServer } from '../../server/src/http.js';
 import { DEFAULTS, deepMerge } from '../../server/src/config.js';
 const sourceHashes = Object.fromEntries(['actions', 'brain', 'controller', 'mushroom', 'world', 'service', 'view', 'config', 'store', 'migrations', 'rng', 'http', 'ws', 'auth', 'wallet', 'speech'].map(name => [name, crypto.createHash('sha256').update(fs.readFileSync(new URL(`../../server/src/${name}.js`, import.meta.url))).digest('hex')]));
+// Read only this process's cgroup counters, never host/container identities.
+const cgroup = () => Object.fromEntries(['memory.max', 'memory.peak', 'memory.current', 'memory.events', 'cpu.max', 'cpu.stat'].map(name => {
+  try { return [name, fs.readFileSync(`/sys/fs/cgroup/${name}`, 'utf8').trim()]; } catch { return [name, null]; }
+}));
+const cgroupBefore = cgroup();
 const [population, mode, clients, ticks, realtime] = [Number(process.argv[2] ?? 24), process.argv[3] ?? 'mb-v1', Number(process.argv[4] ?? 8), Number(process.argv[5] ?? 1200), process.argv[6] === 'realtime'];
 const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'stratoks-capacity-'));
 const cfg = deepMerge(DEFAULTS, { server: { dataDir, host: '127.0.0.1', port: 0, rateLimit: { publicGet: 1000000 } }, world: { brainMode: mode, initialSeedCount: population, tickMs: 1000 } });
@@ -64,7 +69,7 @@ try {
   const world = svc.world;
   const equal = clientState.every(s => JSON.stringify([...s.entities]) === JSON.stringify([...clientState[0].entities]));
   const output = {
-    formatVersion: 1, sourceHashes, platform: `${process.platform}/${process.arch}`, node: process.version,
+    formatVersion: 2, sourceHashes, platform: `${process.platform}/${process.arch}`, node: process.version,
     mode, initialPopulation: population, clients, warmupTicks: warmup, measuredTicks: ticks, realtime,
     finalPopulation: world.creatures.length, populationAtMeasurementStart: metricsStart.population,
     initialIdsRetained: initialIds.filter(id => world.creatures.some(c => c.id === id)).length,
@@ -79,10 +84,11 @@ try {
       totalReceivedBytes:clientState.reduce((s,c)=>s+c.bytes,0), sequenceGaps:clientState.reduce((s,c)=>s+c.gaps,0), clientsSameEntities:equal,
       clientsFinalTick:clientState.map(s=>s.tick), clientsClosedDuringRun:clientState.filter(c=>c.closed).length },
     raw: { tickWallMs: times, intervalMs: intervals, firstClientDeltaBytes:payloads, inspectorBytes:polls },
-    limitation: 'Shared host. Process-cap supervision is separate evidence. Accelerated runs estimate throughput, realtime runs measure actual cadence. Clients share process budget. No population reset, reseed, culling or disabled ecology.'
+    cgroup: { before: cgroupBefore, after: cgroup() },
+    limitation: 'Accelerated runs estimate throughput; realtime runs measure cadence. Service and real clients share process CPU/RSS. Cgroup counters are observational until the runner verifies the requested container settings. No population reset, reseed, culling, refills or disabled ecology. Short-run evidence only.'
   };
   const name = `capacity-${mode}-${population}-${clients}-${realtime?'realtime':'accelerated'}.json`;
-  fs.writeFileSync(new URL(`../results/phase2a/${name}`, import.meta.url), JSON.stringify(output,null,2)+'\n');
+  fs.writeFileSync(process.argv[7] ?? new URL(`../results/phase2a/${name}`, import.meta.url), JSON.stringify(output,null,2)+'\n');
   console.log(JSON.stringify({ ...output, raw: undefined }));
   if (!equal || output.protocol.sequenceGaps || output.protocol.clientsClosedDuringRun || output.protocol.clientsFinalTick.some(t => t !== world.tick)) process.exitCode = 1;
 } finally {
